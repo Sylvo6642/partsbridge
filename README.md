@@ -38,7 +38,7 @@ Supabase (Postgres + pgvector + Auth) · OpenAI (gpt-4o-mini, text-embedding-3-s
 
 ## Roadmap
 - [x] **Day 1:** repo, synthetic catalog (621 parts, 5 sellers, 1,321 offers), database schema, docs
-- [ ] Day 2: extraction + its test
+- [x] **Day 2:** extraction (structured outputs + validation + retry), AI call logging, eval: 20/20 tuning, 9/10 held-out
 - [ ] Day 3: catalog search (keyword + vector) + its test
 - [ ] Day 4: part-matching agent + its test
 - [ ] Day 5: app: login, buyer screens
@@ -58,6 +58,8 @@ python -m scripts.generate_catalog   # writes data/*.csv
 python -m scripts.migrate            # creates the tables in Supabase
 python -m scripts.load_catalog       # loads the catalog
 pytest
+python -m evals.run_extraction       # scores extraction (calls OpenAI, ~$0.003)
+uvicorn app.main:app --port 8010     # API docs at http://127.0.0.1:8010/docs
 ```
 
 ## Docs
