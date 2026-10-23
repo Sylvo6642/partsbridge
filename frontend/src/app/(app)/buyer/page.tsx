@@ -51,14 +51,14 @@ export default function MyRequestsPage() {
       )}
 
       {rows && rows.length > 0 && (
-        <table className="mt-6 w-full text-left">
+        <table className="mt-6 w-full table-fixed text-left">
           <thead className="border-b border-ink bg-band text-label font-semibold uppercase tracking-wider text-ink-2">
             <tr>
               <th className="px-3 py-2">Request</th>
-              <th className="px-3 py-2 text-right">Lines</th>
-              <th className="px-3 py-2">Status</th>
-              <th className="px-3 py-2 text-right">Quotes</th>
-              <th className="px-3 py-2 text-right">Created</th>
+              <th className="w-16 px-3 py-2 text-right">Lines</th>
+              <th className="w-52 px-3 py-2">Status</th>
+              <th className="w-20 px-3 py-2 text-right">Quotes</th>
+              <th className="w-32 px-3 py-2 text-right">Created</th>
             </tr>
           </thead>
           <tbody>

@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from app.ai.extraction import ExtractedRFQ, ExtractionError, extract
 from app.ai.llm import LLMError
 from app.ai.matching import search
-from app.api import account, rfqs
+from app.api import account, rfqs, seller
 from app.auth import User, current_user
 from app.config import settings
 from app.db import as_user
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 app.include_router(account.router)
 app.include_router(rfqs.router)
+app.include_router(seller.router)
 
 
 @app.get("/health")

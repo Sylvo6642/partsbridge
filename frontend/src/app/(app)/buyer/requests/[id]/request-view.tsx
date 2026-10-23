@@ -78,7 +78,7 @@ export function RequestView() {
       {!draft && <QuotesTable rfq={rfq} waiting={waiting} onChange={change} />}
 
       {draft && (
-        <div className="sticky bottom-0 z-10 -mx-5 mt-8 border-t border-ink bg-paper/95 px-5 py-3 backdrop-blur-sm">
+        <div className="sticky bottom-0 z-10 mt-8 border-t border-ink bg-paper/95 py-3 backdrop-blur-sm">
           <div className="flex flex-wrap items-center gap-4">
             <AiTrace ai={rfq.ai} />
             <div className="ml-auto flex items-center gap-4">

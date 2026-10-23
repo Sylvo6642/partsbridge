@@ -1,6 +1,6 @@
 """The part-matching agent: one buyer line in, a decision out.
 
-The loop:
+The loop (shared with the quote agent, in app/ai/agent_loop.py):
 1. Send the buyer's line + tool descriptions to the model.
 2. If the model asks for tool calls, run them and send the results back. Repeat.
 3. When the model answers, check the answer with plain code (it may only choose parts the tools returned).
@@ -17,7 +17,7 @@ from uuid import UUID, uuid4
 import psycopg
 from pydantic import BaseModel, Field
 
-from app.ai import llm
+from app.ai.agent_loop import run_tool_loop
 from app.ai.extraction import LineItem
 from app.ai.matching.tools import TOOLSETS, run_tool
 from app.part_numbers import normalize_part_number
@@ -121,35 +121,23 @@ def settle_brand(conn: psycopg.Connection, line: LineItem, decision: MatchDecisi
 
 def match_line(conn: psycopg.Connection, line: LineItem, *, prompt_version: str = PROMPT_VERSION,
                trace_id: UUID | None = None, user_id: UUID | None = None) -> MatchResult:
-    trace_id = trace_id or uuid4()
-    instructions = (PROMPTS_DIR / f"{prompt_version}.md").read_text(encoding="utf-8")
-    conversation: list = [{"role": "user", "content": f"Buyer line: {describe_line(line)}"}]
-    result = MatchResult(decision=MatchDecision(status="not_found", part_id=None, candidate_part_ids=[],
-                                                reason="The agent did not finish."))
-    seen_ids: set[int] = set()
-
-    for _ in range(MAX_TURNS):
-        step = llm.parse(feature="matching", prompt_version=prompt_version, instructions=instructions,
-                         input=conversation, schema=MatchDecision, tools=TOOLSETS[prompt_version],
-                         trace_id=trace_id, user_id=user_id)
-        result.model_calls += 1
-        result.cost_usd += step.cost_usd
-        result.latency_ms += step.latency_ms
-
-        calls = [item for item in step.response.output if item.type == "function_call"]
-        if not calls:
-            result.decision, result.guardrail = check_decision(step.output, seen_ids)
-            if prompt_version not in ("matching_v1", "matching_v2", "matching_v3"):
-                result.decision, result.settled = settle_brand(conn, line, result.decision)
-            return result
-
-        conversation += step.response.output  # keep the model's tool requests in the history
-        for call in calls:
-            output = run_tool(conn, call.name, call.arguments, grouped=prompt_version != "matching_v1")
-            seen_ids.update(_part_ids(output))
-            result.tool_calls.append(f"{call.name}({call.arguments})")
-            conversation.append({"type": "function_call_output", "call_id": call.call_id,
-                                 "output": json.dumps(output, default=str)})
-
-    result.guardrail = f"stopped after {MAX_TURNS} model calls"
+    loop = run_tool_loop(
+        feature="matching", prompt_version=prompt_version,
+        instructions=(PROMPTS_DIR / f"{prompt_version}.md").read_text(encoding="utf-8"),
+        message=f"Buyer line: {describe_line(line)}", schema=MatchDecision, tools=TOOLSETS[prompt_version],
+        run_tool=lambda name, args: run_tool(conn, name, args, grouped=prompt_version != "matching_v1"),
+        max_turns=MAX_TURNS, trace_id=trace_id or uuid4(), user_id=user_id,
+    )
+    result = MatchResult(
+        decision=MatchDecision(status="not_found", part_id=None, candidate_part_ids=[],
+                               reason="The agent did not finish."),
+        tool_calls=loop.tool_calls, model_calls=loop.model_calls, cost_usd=loop.cost_usd, latency_ms=loop.latency_ms,
+    )
+    if loop.output is None:
+        result.guardrail = f"stopped after {MAX_TURNS} model calls"
+        return result
+    seen_ids = set().union(*(_part_ids(o) for o in loop.tool_outputs)) if loop.tool_outputs else set()
+    result.decision, result.guardrail = check_decision(loop.output, seen_ids)
+    if prompt_version not in ("matching_v1", "matching_v2", "matching_v3"):
+        result.decision, result.settled = settle_brand(conn, line, result.decision)
     return result

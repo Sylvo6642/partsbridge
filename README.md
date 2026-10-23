@@ -28,7 +28,7 @@ One account has a Buyer / Seller switch, so a visitor can run the whole loop alo
 |---|---|---|
 | Extraction | Messy text → checked parts list (structured output) | Fields correct |
 | Part matching | Search by part number + keyword + meaning (RAG), tools `search_catalog`, `find_equivalent`, confidence score | Right part in top 5 |
-| Quote agent | Tools `get_stock`, `get_price`, `compute_total`. The AI never makes up a price | Total exactly right |
+| Quoting | AI reads the buyer's notes (are substitutes allowed?); code applies the stock/substitution policy and prices every line. A tool-calling agent version is kept as the measured baseline | Lines and quotes correct, unwanted substitutions |
 | Safety | AI never decides who sees what; injection tests; human clicks before sending; every AI call logged with cost | Attacks that succeed (target 0) |
 
 Scores live in [`docs/evals/`](docs/evals/).
@@ -42,7 +42,7 @@ Supabase (Postgres + pgvector + Auth) · OpenAI (gpt-4o-mini, text-embedding-3-s
 - [x] **Day 3:** hybrid catalog search (part number + keyword + pgvector, merged with RRF): Recall@5 98% vs 85% best single method
 - [x] **Day 4:** part-matching agent (tool calling, spec filter, code guardrails): held-out 83% correct vs 50% for search alone; confidently wrong 1 vs 6
 - [x] **Day 5:** the app: login, per-visitor sandbox with Row Level Security enforced for API and agents, buyer screens that show the AI's work
-- [ ] Day 6: quote agent + seller screens + its test
+- [x] **Day 6:** quoting + seller screens. The tool-calling agent scored 25% fully correct quotes; AI-reads-notes + code policy scored 100% at a tenth of the cost
 - [ ] Day 7: bot seller + accept a quote (full loop); safety tests
 - [ ] Day 8: deploy + check it as a brand-new visitor
 
@@ -63,6 +63,8 @@ python -m scripts.smoke_buyer          # live check: buyer flow + isolation betw
 python -m evals.run_extraction       # scores extraction (calls OpenAI, ~$0.003)
 python -m evals.run_search           # scores each search method
 python -m evals.run_matching         # scores the matching agent vs a no-AI baseline (~$0.03)
+python -m evals.run_quoting --prompt quoting_v2   # scores quoting (v1 = the agent baseline)
+python -m scripts.smoke_seller       # live check: seller flow + isolation
 uvicorn app.main:app --port 8010     # API docs at http://127.0.0.1:8010/docs
 
 cd ../frontend && npm install && npm run dev   # http://localhost:3000

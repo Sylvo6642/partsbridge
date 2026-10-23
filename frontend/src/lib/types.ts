@@ -31,9 +31,9 @@ export type QuoteSummary = {
   seller_name: string;
   is_your_shop: boolean;
   status: "draft" | "submitted" | "accepted" | "rejected";
-  subtotal: string | null;
-  shipping: string | null;
-  total: string | null;
+  subtotal: string | number | null;
+  shipping: string | number | null;
+  total: string | number | null;
   lead_time_days: number | null;
   notes: string | null;
   submitted_at: string | null;
@@ -73,3 +73,43 @@ export type AiSummary = {
   model_time_ms: number;
   by_feature: Record<string, number>;
 };
+
+export type InboxItem = {
+  id: string;
+  buyer_name: string;
+  is_sample: boolean;
+  raw_text: string;
+  needed_by: string | null;
+  status: Rfq["status"];
+  published_at: string | null;
+  line_count: number;
+  my_quote_status: QuoteSummary["status"] | null;
+  my_quote_total: string | number | null;
+};
+
+export type QuoteLine = {
+  id: string;
+  rfq_line_id: string;
+  part: Part | null;
+  quantity: number;
+  unit_price: string | number | null;
+  line_total: string | number | null;
+  lead_time_days: number | null;
+  note: string | null;
+  stock_qty: number | null;
+};
+
+export type MyQuote = {
+  id: string;
+  status: QuoteSummary["status"];
+  subtotal: string | number | null;
+  shipping: string | number | null;
+  total: string | number | null;
+  lead_time_days: number | null;
+  notes: string | null;
+  submitted_at: string | null;
+  ai: AiSummary | null;
+  lines: QuoteLine[];
+};
+
+export type SellerRfq = Rfq & { my_quote: MyQuote | null };
