@@ -80,7 +80,19 @@ def settle_brand(conn: psycopg.Connection, line: LineItem, decision: MatchDecisi
     """
     note = None
     ids = [decision.part_id] if decision.status == "matched" else decision.candidate_part_ids
-    groups = {r[0] for r in conn.execute("select interchange_group from parts where id = any(%s)", (ids,))}
+    group_of = dict(conn.execute("select id, interchange_group from parts where id = any(%s)", (ids,)).fetchall())
+    groups = set(group_of.values())
+    if decision.status == "needs_choice":
+        # One option per physical part: the model sometimes lists brands of the same part as separate options.
+        seen, first_per_group = set(), []
+        for i in ids:
+            if i in group_of and group_of[i] not in seen:
+                seen.add(group_of[i])
+                first_per_group.append(i)
+        if len(first_per_group) < len(ids):
+            decision = decision.model_copy(update={"candidate_part_ids": first_per_group})
+            ids = first_per_group
+            note = "duplicate brand options removed"
     if decision.status == "needs_choice" and len(groups) == 1:
         decision = decision.model_copy(update={"status": "matched", "part_id": ids[0], "candidate_part_ids": []})
         note = "brand options of one part turned into a match"

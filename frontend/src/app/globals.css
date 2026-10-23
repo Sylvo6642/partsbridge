@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* PartsBridge: a printed industrial parts catalog, as a working app.
+   White paper, carbon ink, one catalog blue, muted category tab colours, status colours only for match state. */
+
+@theme {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #ffffff;
+  --color-band: #eef1f4;      /* table header band, quiet fills */
+  --color-band-2: #f6f7f9;    /* zebra rows, hover */
+  --color-rule: #d8dde3;      /* hairlines */
+  --color-rule-strong: #b9c0c8;
+  --color-ink: #15181c;
+  --color-ink-2: #48505a;     /* secondary text, 8:1 on paper */
+  --color-ink-3: #68707a;     /* tertiary and placeholders, 4.8:1 on paper */
+
+  --color-catalog: #1f4fa3;   /* the catalog's cover blue: top bar, primary actions, links, selection */
+  --color-catalog-deep: #173d80;
+  --color-catalog-tint: #e3ebf8;
+  --color-catalog-ink: #c9d8f2;  /* secondary text on the blue bar */
+
+  --color-tab-bearing: #2d6a89;
+  --color-tab-belt: #8b5711;
+  --color-tab-filter: #46753a;
+  --color-tab-motor: #973a2c;
+
+  --color-ok: #1d7444;
+  --color-ok-tint: #e6f3eb;
+  --color-choose: #9a5800;
+  --color-choose-tint: #fdf1dc;
+  --color-miss: #b42318;
+  --color-miss-tint: #fdecea;
+
+  --text-label: 0.75rem;     /* 12px: column heads, tab letters, small caps labels */
+  --text-label--line-height: 1rem;
+  --text-body: 0.875rem;     /* 14px: everything you read */
+  --text-body--line-height: 1.35rem;
+  --text-title: 1.375rem;    /* 22px: page titles */
+  --text-title--line-height: 1.75rem;
+  --text-figure: 1.0625rem;  /* 17px: part numbers and totals, condensed bold */
+  --text-figure--line-height: 1.375rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-paper);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    background: var(--color-paper);
+  }
+  /* Every number in the app lines up in columns, like a catalog table. */
+  table, input, .figures { font-variant-numeric: tabular-nums lining-nums; }
+  ::selection { background: var(--color-catalog-tint); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-catalog); outline-offset: 2px; border-radius: 2px; }
+  input, textarea { caret-color: var(--color-catalog); }
+  textarea::placeholder, input::placeholder { color: var(--color-ink-3); }
+  a { text-underline-offset: 3px; }
+  * { scrollbar-color: var(--color-rule-strong) transparent; scrollbar-width: thin; }
+}
+
+/* Condensed width for part numbers, tab letters and figures (Archivo's width axis). */
+.condensed { font-stretch: 75%; }
+.semi-condensed { font-stretch: 87.5%; }
+
+@keyframes settle {
+  from { background-color: var(--color-catalog-tint); }
+  to { background-color: transparent; }
+}
+.settle { animation: settle 900ms var(--ease-out-expo); }
+
+@keyframes step-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settle, .step-fill { animation: none !important; }
+}
