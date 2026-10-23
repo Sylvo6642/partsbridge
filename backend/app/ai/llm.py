@@ -15,9 +15,10 @@ from app.ai import tracing
 from app.config import settings
 
 MODEL = "gpt-4o-mini"
+EMBEDDING_MODEL = "text-embedding-3-small"
 
 # USD per 1 million tokens: (input, output). Check https://openai.com/api/pricing when adding a model.
-PRICES = {"gpt-4o-mini": (0.15, 0.60)}
+PRICES = {"gpt-4o-mini": (0.15, 0.60), "text-embedding-3-small": (0.02, 0.0)}
 
 
 class LLMError(Exception):
@@ -72,3 +73,23 @@ def parse[T: BaseModel](*, feature: str, prompt_version: str, instructions: str,
         raise LLMError("The model returned no structured output (it may have refused).")
     return LLMResult(output=parsed, input_tokens=tokens_in, output_tokens=tokens_out,
                      cost_usd=usd, latency_ms=latency_ms)
+
+
+def embed(texts: list[str], *, feature: str, trace_id: UUID | None = None,
+          user_id: UUID | None = None) -> list[list[float]]:
+    """Turn texts into embedding vectors (lists of 1536 numbers). One API call for the whole batch."""
+    log = dict(trace_id=trace_id or uuid4(), user_id=user_id, feature=feature, prompt_version="-",
+               model=EMBEDDING_MODEL)
+    start = time.perf_counter()
+    try:
+        response = client().embeddings.create(model=EMBEDDING_MODEL, input=texts)
+    except Exception as e:
+        latency_ms = round((time.perf_counter() - start) * 1000)
+        tracing.log_call(**log, input_tokens=0, output_tokens=0, cost_usd=0, latency_ms=latency_ms,
+                         ok=False, error=str(e)[:500])
+        raise LLMError(f"OpenAI embedding call failed: {e}") from e
+    latency_ms = round((time.perf_counter() - start) * 1000)
+    tokens = response.usage.prompt_tokens
+    tracing.log_call(**log, input_tokens=tokens, output_tokens=0, cost_usd=cost(EMBEDDING_MODEL, tokens, 0),
+                     latency_ms=latency_ms, ok=True)
+    return [item.embedding for item in response.data]

@@ -60,7 +60,7 @@ BEARING_SIZES = {
 }
 # sealing type -> (description, price factor, suffix per brand). Each brand writes it differently.
 SEALING = {
-    "open": ("open (no seals)", 1.00, {"Norvik": "", "Kanto Seiko": "", "Ferrum": ""}),
+    "open": ("open type, unsealed and unshielded", 1.00, {"Norvik": "", "Kanto Seiko": "", "Ferrum": ""}),
     "shielded": ("metal shields both sides (ZZ)", 1.15, {"Norvik": "-2Z", "Kanto Seiko": "ZZ", "Ferrum": "-2ZR"}),
     "sealed": ("rubber seals both sides (2RS)", 1.25, {"Norvik": "-2RS1", "Kanto Seiko": "DDU", "Ferrum": "-2RSR"}),
 }

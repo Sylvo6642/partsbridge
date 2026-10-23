@@ -44,3 +44,9 @@ def test_every_part_has_at_least_one_seller():
     offered = {o["part_id"] for o in catalog.offers}
     missing = [p["part_number"] for p in catalog.parts if p["id"] not in offered]
     assert len(missing) < len(catalog.parts) * 0.1  # a few unstocked parts are realistic
+
+
+def test_open_bearing_text_does_not_contain_the_word_seals():
+    # "open (no seals)" made keyword search match "sealed" queries to open bearings (Day 3 eval)
+    open_bearings = [p for p in build_catalog().parts if p["interchange_group"].endswith(":open")]
+    assert open_bearings and all("seals" not in p["description"] for p in open_bearings)

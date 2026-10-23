@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from app.ai.extraction import ExtractedRFQ, ExtractionError, extract
 from app.ai.llm import LLMError
+from app.ai.matching import search
 from app.db import connect
 from app.part_numbers import normalize_part_number
 
@@ -29,6 +30,14 @@ def find_parts(part_number: str):
             (normalize_part_number(part_number),),
         ).fetchall()
     return [dict(zip(("id", "brand", "part_number", "name", "description"), r)) for r in rows]
+
+
+@app.get("/search")
+def search_parts(q: str, part_number: str | None = None, limit: int = 10):
+    """Hybrid catalog search: part number + keyword + meaning, merged with RRF."""
+    with connect() as conn:
+        hits = search.hybrid(conn, q, part_number, limit=limit)
+    return [{**h.__dict__, "score": round(h.score, 4)} for h in hits]
 
 
 class ExtractRequest(BaseModel):

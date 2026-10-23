@@ -1,0 +1,40 @@
+{"id": "s01", "tag": "exact code", "text": "6205DDU", "part_number": "6205DDU", "expected_group": "bearing:6205:sealed"}
+{"id": "s02", "tag": "exact code", "text": "SPA-1250", "part_number": "SPA-1250", "expected_group": "belt:SPA1250"}
+{"id": "s03", "tag": "exact code", "text": "FR250/10", "part_number": "FR250/10", "expected_group": "filter:hydraulic:10:250"}
+{"id": "s04", "tag": "exact code", "text": "K3E01504B3", "part_number": "K3E01504B3", "expected_group": "motor:1.5kw:4p:B3"}
+{"id": "s05", "tag": "exact code", "text": "NM3-112M-4P-4KW-B5", "part_number": "NM3-112M-4P-4KW-B5", "expected_group": "motor:4kw:4p:B5"}
+{"id": "s06", "tag": "exact code", "text": "SO-UNF34-100", "part_number": "SO-UNF34-100", "expected_group": "filter:spin-on:UNF34:100"}
+{"id": "s07", "tag": "exact code", "text": "6308-2ZR", "part_number": "6308-2ZR", "expected_group": "bearing:6308:shielded"}
+{"id": "s08", "tag": "exact code", "text": "FX-B70", "part_number": "FX-B70", "expected_group": "belt:B70"}
+{"id": "s09", "tag": "messy code", "text": "6206 2rs1", "part_number": "6206 2rs1", "expected_group": "bearing:6206:sealed"}
+{"id": "s10", "tag": "messy code", "text": "spb2250", "part_number": "spb2250", "expected_group": "belt:SPB2250"}
+{"id": "s11", "tag": "messy code", "text": "a42", "part_number": "a42", "expected_group": "belt:A42"}
+{"id": "s12", "tag": "messy code", "text": "kh 10250", "part_number": "kh 10250", "expected_group": "filter:hydraulic:10:250"}
+{"id": "s13", "tag": "messy code", "text": "fsom20140", "part_number": "fsom20140", "expected_group": "filter:spin-on:M20:140"}
+{"id": "s14", "tag": "messy code", "text": "6004 2rsr", "part_number": "6004 2rsr", "expected_group": "bearing:6004:sealed"}
+{"id": "s15", "tag": "code + words", "text": "6205 sealed bearing", "part_number": "6205", "expected_group": "bearing:6205:sealed"}
+{"id": "s16", "tag": "code + words", "text": "6310 shielded bearing ZZ", "part_number": "6310", "expected_group": "bearing:6310:shielded"}
+{"id": "s17", "tag": "code + words", "text": "6207 rubber seals both sides", "part_number": "6207", "expected_group": "bearing:6207:sealed"}
+{"id": "s18", "tag": "code + words", "text": "6302 open bearing", "part_number": "6302", "expected_group": "bearing:6302:open"}
+{"id": "s19", "tag": "code + words", "text": "6001 2RS bearing", "part_number": "6001 2RS", "expected_group": "bearing:6001:sealed"}
+{"id": "s20", "tag": "description", "text": "sealed deep groove bearing 25mm bore 52 OD", "part_number": null, "expected_group": "bearing:6205:sealed"}
+{"id": "s21", "tag": "description", "text": "1.5 kW 4 pole motor foot mounted 400V", "part_number": null, "expected_group": "motor:1.5kw:4p:B3"}
+{"id": "s22", "tag": "description", "text": "hydraulic return filter element 10 micron 400mm long", "part_number": null, "expected_group": "filter:hydraulic:10:400"}
+{"id": "s23", "tag": "description", "text": "air filter element 160 mm diameter 300 mm high", "part_number": null, "expected_group": "filter:air:160:300"}
+{"id": "s24", "tag": "description", "text": "spin-on oil filter 3/4-16 UNF thread 140mm high", "part_number": null, "expected_group": "filter:spin-on:UNF34:140"}
+{"id": "s25", "tag": "description", "text": "classical V-belt section B 62 inch", "part_number": null, "expected_group": "belt:B62"}
+{"id": "s26", "tag": "description", "text": "wedge belt SPA 1250 mm datum length", "part_number": null, "expected_group": "belt:SPA1250"}
+{"id": "s27", "tag": "description", "text": "11 kW 2 pole motor flange mount", "part_number": null, "expected_group": "motor:11kw:2p:B5"}
+{"id": "s28", "tag": "description", "text": "bearing 40 x 90 x 23 mm with metal shields", "part_number": null, "expected_group": "bearing:6308:shielded"}
+{"id": "s29", "tag": "description", "text": "3 micron hydraulic filter 160 mm", "part_number": null, "expected_group": "filter:hydraulic:3:160"}
+{"id": "s30", "tag": "description", "text": "0.37 kW four pole motor, foot mount", "part_number": null, "expected_group": "motor:0.37kw:4p:B3"}
+{"id": "s31", "tag": "synonyms", "text": "compressor intake filter 130 mm round", "part_number": null, "expected_group": "filter:air:130:250"}
+{"id": "s32", "tag": "synonyms", "text": "electric motor 4 kilowatt 2 pole flange", "part_number": null, "expected_group": "motor:4kw:2p:B5"}
+{"id": "s33", "tag": "synonyms", "text": "ball bearing for 20mm shaft, 47mm housing, rubber sealed", "part_number": null, "expected_group": "bearing:6204:sealed"}
+{"id": "s34", "tag": "synonyms", "text": "gearbox oil filter M20 thread short 100mm", "part_number": null, "expected_group": "filter:spin-on:M20:100"}
+{"id": "s35", "tag": "synonyms", "text": "fan belt A section 1067 mm", "part_number": null, "expected_group": "belt:A42"}
+{"id": "s36", "tag": "synonyms", "text": "1450 rpm motor 2.2 kW feet mounted", "part_number": null, "expected_group": "motor:2.2kw:4p:B3"}
+{"id": "s37", "tag": "synonyms", "text": "2900 rpm 7.5 kW motor B3", "part_number": null, "expected_group": "motor:7.5kw:2p:B3"}
+{"id": "s38", "tag": "synonyms", "text": "bearing 10mm bore 26mm outside, unsealed", "part_number": null, "expected_group": "bearing:6000:open"}
+{"id": "s39", "tag": "synonyms", "text": "Keilriemen SPB 1500", "part_number": null, "expected_group": "belt:SPB1500"}
+{"id": "s40", "tag": "synonyms", "text": "25 micron return line element, 250 long", "part_number": null, "expected_group": "filter:hydraulic:25:250"}
