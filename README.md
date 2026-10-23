@@ -40,7 +40,7 @@ Supabase (Postgres + pgvector + Auth) · OpenAI (gpt-4o-mini, text-embedding-3-s
 - [x] **Day 1:** repo, synthetic catalog (621 parts, 5 sellers, 1,321 offers), database schema, docs
 - [x] **Day 2:** extraction (structured outputs + validation + retry), AI call logging, eval: 20/20 tuning, 9/10 held-out
 - [x] **Day 3:** hybrid catalog search (part number + keyword + pgvector, merged with RRF): Recall@5 98% vs 85% best single method
-- [ ] Day 4: part-matching agent + its test
+- [x] **Day 4:** part-matching agent (tool calling, spec filter, code guardrails): held-out 83% correct vs 50% for search alone; confidently wrong 1 vs 6
 - [ ] Day 5: app: login, buyer screens
 - [ ] Day 6: quote agent + seller screens + its test
 - [ ] Day 7: bot seller + accept a quote (full loop); safety tests
@@ -61,6 +61,7 @@ python -m scripts.embed_catalog      # embeddings for search (~$0.001)
 pytest
 python -m evals.run_extraction       # scores extraction (calls OpenAI, ~$0.003)
 python -m evals.run_search           # scores each search method
+python -m evals.run_matching         # scores the matching agent vs a no-AI baseline (~$0.03)
 uvicorn app.main:app --port 8010     # API docs at http://127.0.0.1:8010/docs
 ```
 

@@ -24,3 +24,9 @@ Each decision: what was chosen and why. Newest at the bottom.
 | D-018 | 2026-10-23 | Search eval counts any brand of the right physical part as correct (same `interchange_group`) | Search's job is to find the right part; choosing the brand is the buyer's or the agent's call |
 | D-019 | 2026-10-23 | Embeddings and full-text live in the same Postgres table (pgvector, HNSW index), not a separate vector database | 621 parts; one database means one place for data, permissions (RLS) and backups |
 | D-020 | 2026-10-23 | Catalog text avoids negations ("open (no seals)" → "open type, unsealed and unshielded") | Stemming and embeddings both read "no seals" as close to "sealed"; found by the search eval |
+| D-021 | 2026-10-23 | Matching is an agent with a loop limit (5 model calls) and three outcomes: matched, needs_choice, not_found | Asking the buyer is cheap; a confident wrong match is expensive. The limit bounds cost and latency |
+| D-022 | 2026-10-23 | Headline matching metric is "confidently wrong", next to accuracy, always compared with a no-AI baseline | Shows what the AI adds (19 → 0 wrong picks) and whether it's worth ~$0.0008 per line |
+| D-023 | 2026-10-23 | Tool output is grouped by physical part (brands listed under it) | v1 returned one row per brand and the model kept asking "which brand?"; grouping took accuracy from 38% to 66% and halved cost |
+| D-024 | 2026-10-23 | `filter_catalog`: the model fills in spec fields (strict schema with enums), Postgres compares exactly | Small models are bad at comparing numbers in text; databases aren't. 66% → 81% |
+| D-025 | 2026-10-23 | Plain code, not the model, picks the brand option and rejects any part a tool didn't return | Fixed rules belong in code: cheaper, testable, always applied |
+| D-026 | 2026-10-23 | Every AI match is shown to the buyer to confirm before publishing | The agent still makes rare confident mistakes (held-out: 1 in 12); a human check catches them |

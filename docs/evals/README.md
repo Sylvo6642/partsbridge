@@ -7,7 +7,7 @@ prints a score. Each run is saved here as a dated report, so progress is visible
 |---|---|---|---|
 | Extraction | Cases fully correct · item F1 | prompt v3: tuning 20/20 · held-out 9/10 · F1 100% ([report](extraction_v3.md), [held-out](extraction_v3-extraction_holdout.md)) | 2 |
 | Catalog search | Right part in top 5 (Recall@5) · MRR | hybrid v2: 98% · 0.87 ([v1](search_v1.md), [v2](search_v2.md)) | 3 |
-| Part matching agent | Right part chosen; abstains when unsure | not yet | 4 |
+| Part matching agent | Correct decision · confidently wrong | v4: tuning 88% · 0 wrong; held-out 83% · 1 wrong (baseline 50% · 6) ([report](matching_v4.md), [held-out](matching_v4-matching_holdout.md)) | 4 |
 | Quote agent | Total exactly right | not yet | 6 |
 | Safety | Injection attacks that succeed (target 0) | not yet | 7 |
 
@@ -25,3 +25,13 @@ prints a score. Each run is saved here as a dated report, so progress is visible
 |---|---|---|---|---|---|
 | 2026-10-23 | v1 | 42% | 78% | 88% | 92% / 0.82 |
 | 2026-10-23 | v2 (no negation in catalog text, keep decimals) | 42% | 85% | 85% | 98% / 0.87 |
+
+### Part matching (32 tuning lines; held-out 12)
+
+| Date | Version | Correct | Confidently wrong | Cost per line |
+|---|---|---|---|---|
+| 2026-10-23 | Baseline: search #1, no AI | 41% (held-out 50%) | 19 (held-out 6) | ~$0 |
+| 2026-10-23 | v1 flat search + find_equivalent | 38% | 0 | $0.00093 |
+| 2026-10-23 | v2 results grouped by physical part | 66% | 0 | $0.00050 |
+| 2026-10-23 | v3 + filter_catalog (exact specs) | 81% | 1 | $0.00091 |
+| 2026-10-23 | v4 + code picks brand, catalog scope in prompt | 88% (held-out 83%) | 0 (held-out 1) | $0.00078 |
