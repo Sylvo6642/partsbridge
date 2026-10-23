@@ -34,4 +34,4 @@ I'm using AI to help build this. I make the calls and I understand every line be
 Day 2: extraction. Messy text in, checked parts list out, first score.
 
 ## First comment
-Repo and day-by-day journal: <GitHub link>
+Repo and day-by-day journal: https://github.com/Sylvo6642/partsbridge
